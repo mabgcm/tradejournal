@@ -1,13 +1,16 @@
 // src/Components/TradeLogs.jsx
 import React, { useState, useEffect } from 'react';
-import { getFirestore, collection, addDoc, deleteDoc, updateDoc, getDocs, doc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, updateDoc, getDocs, doc } from 'firebase/firestore';
 import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, TextField, MenuItem, Grid, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Typography from '@mui/material/Typography';
 import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import 'react-datepicker/dist/react-datepicker.css';
 import { db } from '../firebaseConfig'; // Ensure Firebase is configured and imported correctly
 
-const inputStyle = { height: '35px', padding: '8px 12px' };
 
 function TradeLogs() {
     const [trades, setTrades] = useState([]);
@@ -161,6 +164,7 @@ function TradeLogs() {
                             name="symbol"
                             value={newTrade.symbol}
                             onChange={handleChange}
+                            size="small"
                             fullWidth
                         />
                     </Grid>
@@ -173,7 +177,7 @@ function TradeLogs() {
                                     selected={newTrade.entryDate}
                                     onChange={(date) => handleDateChange(date, 'entryDate')}
                                     dateFormat="yyyy/MM/dd"
-                                    customInput={<TextField fullWidth />}
+                                    customInput={<TextField fullWidth size="small" />}
                                 />
                             </Box>
                         </Grid>
@@ -184,7 +188,7 @@ function TradeLogs() {
                                     selected={newTrade.exitDate}
                                     onChange={(date) => handleDateChange(date, 'exitDate')}
                                     dateFormat="yyyy/MM/dd"
-                                    customInput={<TextField fullWidth />}
+                                    customInput={<TextField fullWidth size="small" />}
                                 />
                             </Box>
                         </Grid>
@@ -201,7 +205,7 @@ function TradeLogs() {
                                     timeIntervals={15}
                                     timeCaption="Time"
                                     dateFormat="HH:mm"
-                                    customInput={<TextField fullWidth />}
+                                    customInput={<TextField fullWidth size="small" />}
                                 />
                             </Box>
                         </Grid>
@@ -216,7 +220,7 @@ function TradeLogs() {
                                     timeIntervals={15}
                                     timeCaption="Time"
                                     dateFormat="HH:mm"
-                                    customInput={<TextField fullWidth />}
+                                    customInput={<TextField fullWidth size="small" />}
                                 />
                             </Box>
                         </Grid>
@@ -229,6 +233,7 @@ function TradeLogs() {
                                 value={newTrade.entryPrice}
                                 onChange={handleChange}
                                 fullWidth
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -238,6 +243,7 @@ function TradeLogs() {
                                 value={newTrade.exitPrice}
                                 onChange={handleChange}
                                 fullWidth
+                                size="small"
                             />
                         </Grid>
 
@@ -249,6 +255,7 @@ function TradeLogs() {
                                 value={newTrade.entryAmount}
                                 onChange={handleChange}
                                 fullWidth
+                                size="small"
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -258,6 +265,7 @@ function TradeLogs() {
                                 value={newTrade.exitAmount}
                                 onChange={handleChange}
                                 fullWidth
+                                size="small"
                             />
                         </Grid>
 
@@ -270,6 +278,7 @@ function TradeLogs() {
                                 onChange={handleChange}
                                 select
                                 fullWidth
+                                size="small"
                             >
                                 <MenuItem value="Long">Long</MenuItem>
                                 <MenuItem value="Short">Short</MenuItem>
@@ -281,7 +290,7 @@ function TradeLogs() {
                                 name="leverage"
                                 value={newTrade.leverage}
                                 onChange={handleChange}
-                                fullWidth
+                                fullWidth size="small"
                             />
                         </Grid>
 
@@ -292,7 +301,7 @@ function TradeLogs() {
                                 name="plAmount"
                                 value={newTrade.plAmount}
                                 disabled
-                                fullWidth
+                                fullWidth size="small"
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -301,7 +310,7 @@ function TradeLogs() {
                                 name="plRate"
                                 value={newTrade.plRate}
                                 disabled
-                                fullWidth
+                                fullWidth size="small"
                             />
                         </Grid>
                     </Grid>
@@ -317,41 +326,51 @@ function TradeLogs() {
             <Table sx={{ mt: 4 }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Entry Date</TableCell>
-                        <TableCell>Entry Time</TableCell>
-                        <TableCell>Symbol</TableCell>
-                        <TableCell>Entry Price</TableCell>
-                        <TableCell>Entry Amount</TableCell>
-                        <TableCell>Leverage</TableCell>
-                        <TableCell>Position</TableCell>
-                        <TableCell>Exit Date</TableCell>
-                        <TableCell>Exit Time</TableCell>
-                        <TableCell>Exit Price</TableCell>
-                        <TableCell>Exit Amount</TableCell>
-                        <TableCell>P/L Amount</TableCell>
-                        <TableCell>P/L Rate</TableCell>
-                        <TableCell>Actions</TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Entry Date</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Entry Time</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Symbol</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Entry Price</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Entry Amount</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Leverage</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Position</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Exit Date</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Exit Time</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Exit Price</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Exit Amount</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>P/L Amount</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>P/L Rate</Typography></TableCell>
+                        <TableCell><Typography variant="h6" gutterBottom>Actions</Typography></TableCell>
+
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {trades.map(trade => (
-                        <TableRow key={trade.id}>
-                            <TableCell>{trade.entryDate}</TableCell>
-                            <TableCell>{trade.entryTime}</TableCell>
-                            <TableCell>{trade.symbol}</TableCell>
-                            <TableCell>{trade.entryPrice}</TableCell>
-                            <TableCell>{trade.entryAmount}</TableCell>
-                            <TableCell>{trade.leverage}</TableCell>
-                            <TableCell>{trade.position}</TableCell>
-                            <TableCell>{trade.exitDate}</TableCell>
-                            <TableCell>{trade.exitTime}</TableCell>
-                            <TableCell>{trade.exitPrice}</TableCell>
-                            <TableCell>{trade.exitAmount}</TableCell>
-                            <TableCell>{trade.plAmount}</TableCell>
-                            <TableCell>{trade.plRate}</TableCell>
-                            <TableCell>
-                                <Button onClick={() => handleEdit(trade)} color="primary" variant="contained" sx={{ mr: 1 }}>Edit</Button>
-                                <Button onClick={() => handleDelete(trade.id)} color="secondary" variant="contained">Delete</Button>
+                    {trades.map((trade, index) => (
+                        <TableRow
+                            key={trade.id}
+                            sx={{
+                                backgroundColor: index % 2 === 0 ? 'action.hover' : 'background.paper',
+                            }}
+                        >
+                            <TableCell variant="" align="center">{trade.entryDate}</TableCell>
+                            <TableCell align="center">{trade.entryTime}</TableCell>
+                            <TableCell align="center">{trade.symbol}</TableCell>
+                            <TableCell align="center">${trade.entryPrice}</TableCell>
+                            <TableCell align="center">${trade.entryAmount}</TableCell>
+                            <TableCell align="center">{trade.leverage}x</TableCell>
+                            <TableCell align="center">{trade.position}</TableCell>
+                            <TableCell align="center">{trade.exitDate}</TableCell>
+                            <TableCell align="center">{trade.exitTime}</TableCell>
+                            <TableCell align="center">${trade.exitPrice}</TableCell>
+                            <TableCell align="center">${trade.exitAmount}</TableCell>
+                            <TableCell align="center">${trade.plAmount}</TableCell>
+                            <TableCell align="center">%{trade.plRate}</TableCell>
+                            <TableCell align="center">
+                                <IconButton onClick={() => handleEdit(trade)} color="primary" size="small">
+                                    <EditIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton onClick={() => handleDelete(trade.id)} color="secondary" size="small">
+                                    <DeleteIcon fontSize="small" />
+                                </IconButton>
                             </TableCell>
                         </TableRow>
                     ))}
