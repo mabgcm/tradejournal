@@ -1,7 +1,7 @@
 // src/Components/TradeLogs.jsx
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc, deleteDoc, updateDoc, getDocs, doc } from 'firebase/firestore';
-import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, TextField, MenuItem, Grid, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, MenuItem, Grid, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,6 +10,7 @@ import NoMaxWidthTooltip from '@mui/material/Tooltip';
 import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import 'react-datepicker/dist/react-datepicker.css';
+import TextField from '@mui/material/TextField';
 import { db } from '../firebaseConfig'; // Ensure Firebase is configured and imported correctly
 
 
@@ -160,17 +161,28 @@ function TradeLogs() {
 
             {/* Popup for data entry */}
             <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
-                <DialogTitle>{editId ? "Edit Trade" : "Add New Trade"}</DialogTitle>
-                <DialogContent>
+                <DialogTitle sx={{
+                    textAlign: 'center',
+                    bgcolor: 'navy',         // Navy blue background
+                    color: 'white',          // White text color
+                    padding: 2,              // Optional: add padding for better appearance
+                    borderTopLeftRadius: '4px',  // Optional: match dialog corner radius
+                    borderTopRightRadius: '4px', // Optional: match dialog corner radius
+                }}>{editId ? "Edit Trade" : "Add New Trade"}</DialogTitle>
+                <DialogContent
+                    sx={{ marginTop: 2 }}>
                     {/* Symbol Field */}
                     <Grid item xs={12}>
-                        <Box sx={{ mb: 1 }}>Symbol</Box>
+                        {/* <Box sx={{ mb: 1 }}>Symbol</Box> */}
                         <TextField
                             name="symbol"
                             value={newTrade.symbol}
                             onChange={handleChange}
                             size="small"
+                            autoComplete="off"
+                            variant='standard'
                             fullWidth
+                            label='Symbol'
                         />
                     </Grid>
                     <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -182,7 +194,7 @@ function TradeLogs() {
                                     selected={newTrade.entryDate}
                                     onChange={(date) => handleDateChange(date, 'entryDate')}
                                     dateFormat="yyyy/MM/dd"
-                                    customInput={<TextField fullWidth size="small" />}
+                                    customInput={<TextField fullWidth size="small" variant='standard' />}
                                 />
                             </Box>
                         </Grid>
@@ -198,7 +210,7 @@ function TradeLogs() {
                                     timeIntervals={15}
                                     timeCaption="Time"
                                     dateFormat="HH:mm"
-                                    customInput={<TextField fullWidth size="small" />}
+                                    customInput={<TextField fullWidth size="small" autoComplete="off" variant='standard' />}
                                 />
                             </Box>
                         </Grid>
@@ -210,7 +222,7 @@ function TradeLogs() {
                                     selected={newTrade.exitDate}
                                     onChange={(date) => handleDateChange(date, 'exitDate')}
                                     dateFormat="yyyy/MM/dd"
-                                    customInput={<TextField fullWidth size="small" />}
+                                    customInput={<TextField fullWidth size="small" autoComplete="off" variant='standard' />}
                                 />
                             </Box>
                         </Grid>
@@ -226,107 +238,130 @@ function TradeLogs() {
                                     timeIntervals={15}
                                     timeCaption="Time"
                                     dateFormat="HH:mm"
-                                    customInput={<TextField fullWidth size="small" />}
+                                    customInput={<TextField fullWidth size="small" autoComplete="off" variant='standard' />}
                                 />
                             </Box>
                         </Grid>
 
                         {/* Entry Price and Exit Price */}
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Entry Price</Box>
+                            {/* <Box sx={{ mb: 1 }}>Entry Price</Box> */}
                             <TextField
                                 name="entryPrice"
                                 value={newTrade.entryPrice}
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
+                                autoComplete="off"
+                                variant='standard'
+                                label='Entry Price'
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Exit Price</Box>
+                            {/* <Box sx={{ mb: 1 }}>Exit Price</Box> */}
                             <TextField
                                 name="exitPrice"
                                 value={newTrade.exitPrice}
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
+                                autoComplete="off"
+                                variant='standard'
+                                label='Exit Price'
                             />
                         </Grid>
 
                         {/* Entry Amount and Exit Amount */}
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Entry Amount</Box>
+                            {/* <Box sx={{ mb: 1 }}>Entry Amount</Box> */}
                             <TextField
                                 name="entryAmount"
                                 value={newTrade.entryAmount}
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
+                                autoComplete="off"
+                                variant='standard'
+                                label='Entry Amount'
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Exit Amount</Box>
+                            {/* <Box sx={{ mb: 1 }}>Exit Amount</Box> */}
                             <TextField
                                 name="exitAmount"
                                 value={newTrade.exitAmount}
                                 onChange={handleChange}
                                 fullWidth
                                 size="small"
+                                autoComplete="off"
+                                variant='standard'
+                                label='Exit Amount'
                             />
                         </Grid>
 
                         {/* Position and Leverage */}
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Position</Box>
+                            {/* <Box sx={{ mb: 1 }}>Position</Box> */}
                             <TextField
                                 name="position"
                                 value={newTrade.position}
                                 onChange={handleChange}
                                 select
                                 fullWidth
+                                variant='standard'
                                 size="small"
+                                autoComplete="off"
+                                label='Position'
                             >
                                 <MenuItem value="Long">Long</MenuItem>
                                 <MenuItem value="Short">Short</MenuItem>
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Leverage</Box>
+                            {/* <Box sx={{ mb: 1 }}>Leverage</Box> */}
                             <TextField
                                 name="leverage"
                                 value={newTrade.leverage}
                                 onChange={handleChange}
                                 fullWidth size="small"
+                                autoComplete="off"
+                                variant='standard'
+                                label='Leverage'
                             />
                         </Grid>
 
                         {/* P/L Amount and P/L Rate */}
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>P/L Amount</Box>
-                            <TextField
+                            <Box sx={{ mb: 1 }}>P/L Amount: {newTrade.plAmount}</Box>
+                            {/* <TextField
                                 name="plAmount"
                                 value={newTrade.plAmount}
                                 disabled
                                 fullWidth size="small"
-                            />
+                                variant='standard'
+                            /> */}
                         </Grid>
                         <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>P/L Rate (%)</Box>
-                            <TextField
+                            <Box sx={{ mb: 1 }}>P/L Rate (%): {newTrade.plRate}</Box>
+                            {/* <TextField
                                 name="plRate"
                                 value={newTrade.plRate}
                                 disabled
                                 fullWidth size="small"
-                            />
+                                variant='standard'
+                            /> */}
                         </Grid>
                     </Grid>
                     {/* Info Field */}
                     <Grid item xs={12}>
-                        <Box sx={{ mb: 1 }}>Notes</Box>
+                        {/* <Box sx={{ mb: 1 }}>Notes</Box> */}
                         <TextField
                             name="info"
+                            label='Notes'
                             value={newTrade.info}
                             onChange={handleChange}
+                            variant='standard'
+                            defaultValue="Notes"
                             size="small"
                             fullWidth
                         />
@@ -334,8 +369,21 @@ function TradeLogs() {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)} color="secondary">Cancel</Button>
-                    <Button onClick={saveTrade} color="primary" variant="contained">Save Trade</Button>
+                    <Button onClick={() => setOpen(false)}
+                        sx={{
+                            textAlign: 'center',
+                            bgcolor: 'white',
+                            color: 'navy',
+                            borderTopLeftRadius: '4px',
+                            borderTopRightRadius: '4px',
+                        }}>Cancel</Button>
+                    <Button onClick={saveTrade} sx={{
+                        textAlign: 'center',
+                        bgcolor: 'navy',
+                        color: 'white',
+                        borderTopLeftRadius: '4px',
+                        borderTopRightRadius: '4px',
+                    }} variant="contained">Save Trade</Button>
                 </DialogActions>
             </Dialog>
 
