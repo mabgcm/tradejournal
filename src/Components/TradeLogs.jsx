@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Typography from '@mui/material/Typography';
+import NoMaxWidthTooltip from '@mui/material/Tooltip';
 import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,7 +28,8 @@ function TradeLogs() {
         exitPrice: '',
         exitAmount: '',
         plAmount: '',
-        plRate: ''
+        plRate: '',
+        info: ''
     });
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
@@ -62,7 +64,8 @@ function TradeLogs() {
             entryDate: dayjs(newTrade.entryDate).format('YYYY-MM-DD'),
             entryTime: dayjs(newTrade.entryTime).format('HH:mm'),
             exitDate: dayjs(newTrade.exitDate).format('YYYY-MM-DD'),
-            exitTime: dayjs(newTrade.exitTime).format('HH:mm')
+            exitTime: dayjs(newTrade.exitTime).format('HH:mm'),
+            info: newTrade.info
         };
 
         try {
@@ -103,7 +106,8 @@ function TradeLogs() {
             exitPrice: trade.exitPrice || '',
             exitAmount: trade.exitAmount || '',
             plAmount: trade.plAmount || '',
-            plRate: trade.plRate || ''
+            plRate: trade.plRate || '',
+            info: trade.info || ''
         });
         setOpen(true);
     };
@@ -138,7 +142,8 @@ function TradeLogs() {
             exitPrice: '',
             exitAmount: '',
             plAmount: '',
-            plRate: ''
+            plRate: '',
+            info: ''
         });
         setEditId(null);
     };
@@ -154,7 +159,7 @@ function TradeLogs() {
             </Button>
 
             {/* Popup for data entry */}
-            <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
+            <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
                 <DialogTitle>{editId ? "Edit Trade" : "Add New Trade"}</DialogTitle>
                 <DialogContent>
                     {/* Symbol Field */}
@@ -169,8 +174,8 @@ function TradeLogs() {
                         />
                     </Grid>
                     <Grid container spacing={2} sx={{ mt: 1 }}>
-                        {/* Entry Date and Exit Date */}
-                        <Grid item xs={6}>
+                        {/* Entry Date */}
+                        <Grid item xs={3}>
                             <Box sx={{ mb: 1 }}>Entry Date</Box>
                             <Box sx={{ width: '100%' }}>
                                 <DatePicker
@@ -181,20 +186,8 @@ function TradeLogs() {
                                 />
                             </Box>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Box sx={{ mb: 1 }}>Exit Date</Box>
-                            <Box sx={{ width: '100%' }}>
-                                <DatePicker
-                                    selected={newTrade.exitDate}
-                                    onChange={(date) => handleDateChange(date, 'exitDate')}
-                                    dateFormat="yyyy/MM/dd"
-                                    customInput={<TextField fullWidth size="small" />}
-                                />
-                            </Box>
-                        </Grid>
-
-                        {/* Entry Time and Exit Time */}
-                        <Grid item xs={6}>
+                        {/* Entry Time */}
+                        <Grid item xs={3}>
                             <Box sx={{ mb: 1 }}>Entry Time</Box>
                             <Box sx={{ width: '100%' }}>
                                 <DatePicker
@@ -209,7 +202,20 @@ function TradeLogs() {
                                 />
                             </Box>
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* Exit Date */}
+                        <Grid item xs={3}>
+                            <Box sx={{ mb: 1 }}>Exit Date</Box>
+                            <Box sx={{ width: '100%' }}>
+                                <DatePicker
+                                    selected={newTrade.exitDate}
+                                    onChange={(date) => handleDateChange(date, 'exitDate')}
+                                    dateFormat="yyyy/MM/dd"
+                                    customInput={<TextField fullWidth size="small" />}
+                                />
+                            </Box>
+                        </Grid>
+                        {/* Exit Time */}
+                        <Grid item xs={3}>
                             <Box sx={{ mb: 1 }}>Exit Time</Box>
                             <Box sx={{ width: '100%' }}>
                                 <DatePicker
@@ -314,6 +320,17 @@ function TradeLogs() {
                             />
                         </Grid>
                     </Grid>
+                    {/* Info Field */}
+                    <Grid item xs={12}>
+                        <Box sx={{ mb: 1 }}>Notes</Box>
+                        <TextField
+                            name="info"
+                            value={newTrade.info}
+                            onChange={handleChange}
+                            size="small"
+                            fullWidth
+                        />
+                    </Grid>
                 </DialogContent>
 
                 <DialogActions>
@@ -345,38 +362,39 @@ function TradeLogs() {
                 </TableHead>
                 <TableBody>
                     {trades.map((trade, index) => (
-                        <TableRow
-                            key={trade.id}
-                            sx={{
-                                backgroundColor: index % 2 === 0 ? 'action.hover' : 'background.paper',
-                            }}
-                        >
-                            <TableCell variant="" align="center">{trade.entryDate}</TableCell>
-                            <TableCell align="center">{trade.entryTime}</TableCell>
-                            <TableCell align="center">{trade.symbol}</TableCell>
-                            <TableCell align="center">${trade.entryPrice}</TableCell>
-                            <TableCell align="center">${trade.entryAmount}</TableCell>
-                            <TableCell align="center">{trade.leverage}x</TableCell>
-                            <TableCell align="center">{trade.position}</TableCell>
-                            <TableCell align="center">{trade.exitDate}</TableCell>
-                            <TableCell align="center">{trade.exitTime}</TableCell>
-                            <TableCell align="center">${trade.exitPrice}</TableCell>
-                            <TableCell align="center">${trade.exitAmount}</TableCell>
-                            <TableCell align="center">${trade.plAmount}</TableCell>
-                            <TableCell align="center">%{trade.plRate}</TableCell>
-                            <TableCell align="center">
-                                <IconButton onClick={() => handleEdit(trade)} color="primary" size="small">
-                                    <EditIcon fontSize="small" />
-                                </IconButton>
-                                <IconButton onClick={() => handleDelete(trade.id)} color="secondary" size="small">
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
+                        <NoMaxWidthTooltip key={trade.id} title={trade.info || ''} arrow>
+                            <TableRow
+                                sx={{
+                                    backgroundColor: index % 2 === 0 ? 'action.hover' : 'background.paper',
+                                }}
+                            >
+                                <TableCell align="center">{trade.entryDate}</TableCell>
+                                <TableCell align="center">{trade.entryTime}</TableCell>
+                                <TableCell align="center">{trade.symbol}</TableCell>
+                                <TableCell align="center">${trade.entryPrice}</TableCell>
+                                <TableCell align="center">${trade.entryAmount}</TableCell>
+                                <TableCell align="center">{trade.leverage}x</TableCell>
+                                <TableCell align="center">{trade.position}</TableCell>
+                                <TableCell align="center">{trade.exitDate}</TableCell>
+                                <TableCell align="center">{trade.exitTime}</TableCell>
+                                <TableCell align="center">${trade.exitPrice}</TableCell>
+                                <TableCell align="center">${trade.exitAmount}</TableCell>
+                                <TableCell align="center">${trade.plAmount}</TableCell>
+                                <TableCell align="center">%{trade.plRate}</TableCell>
+                                <TableCell align="center">
+                                    <IconButton onClick={() => handleEdit(trade)} color="primary" size="small">
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton onClick={() => handleDelete(trade.id)} color="secondary" size="small">
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        </NoMaxWidthTooltip>
                     ))}
                 </TableBody>
             </Table>
-        </Box>
+        </Box >
     );
 }
 

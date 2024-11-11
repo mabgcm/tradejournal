@@ -1,7 +1,11 @@
 // src/Components/Layout.jsx
 import React, { useState, useEffect } from 'react';
 import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
-import { Drawer, List, ListItem, ListItemText, Toolbar, AppBar, Typography, Box, Button } from '@mui/material';
+import {
+    Drawer, List, ListItem, ListItemText, Toolbar, AppBar,
+    Typography, Box, Button, useMediaQuery, BottomNavigation, BottomNavigationAction
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles'; // Import useTheme
 import { Home as HomeIcon, Info as InfoIcon, ContactMail as ContactIcon } from '@mui/icons-material';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -10,11 +14,13 @@ const drawerWidth = 240;
 
 function Layout() {
 
-    // const [userr, setUserr] = useState(null);
+    const theme = useTheme(); // Get theme instance
     const location = useLocation();
     const navigate = useNavigate();
     const auth = getAuth();
     const [user, setUser] = useState(null);
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [navValue, setNavValue] = useState('/');
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -50,10 +56,15 @@ function Layout() {
             });
     };
 
+    const handleNavChange = (event, newValue) => {
+        setNavValue(newValue);
+        navigate(newValue);
+    };
+
     return (
         <Box sx={{ display: 'flex' }}>
             {/* AppBar */}
-            <AppBar position="fixed" sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}>
+            <AppBar position="fixed" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` }, ml: { md: `${drawerWidth}px` } }}>
                 <Toolbar>
                     <Typography variant="h6" noWrap component="div">
                         Trading Journal - {title}
@@ -65,35 +76,58 @@ function Layout() {
                     )}
                 </Toolbar>
             </AppBar>
+
             {/* Side Menu */}
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
+            {/* Conditional Navigation */}
+
+            {isMediumScreen ? (
+                // Bottom Navigation for medium and smaller screens
+                <BottomNavigation
+                    sx={{
+                        width: '100%',
+                        position: 'fixed',
+                        bottom: 0,
+                        zIndex: 91100,
+                        borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+                    }}
+                    value={navValue}
+                    onChange={handleNavChange}
+                >
+                    <BottomNavigationAction label="Home" value="/" icon={<HomeIcon />} />
+                    <BottomNavigationAction label="Logs" value="/logs" icon={<InfoIcon />} />
+                    <BottomNavigationAction label="Contact" value="/contact" icon={<ContactIcon />} />
+                </BottomNavigation>
+            ) : (
+                // Drawer for larger screens
+                <Drawer
+                    sx={{
                         width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="permanent"
-                anchor="left"
-            >
-                <Toolbar />
-                <List>
-                    <ListItem button onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
-                        <HomeIcon sx={{ marginRight: 2 }} />
-                        <ListItemText primary="Home" />
-                    </ListItem>
-                    <ListItem button onClick={() => navigate('/logs')} sx={{ cursor: 'pointer' }}>
-                        <InfoIcon sx={{ marginRight: 2 }} />
-                        <ListItemText primary="Trade Logs" />
-                    </ListItem>
-                    <ListItem button>
-                        <ContactIcon sx={{ marginRight: 2 }} />
-                        <ListItemText primary="Contact" />
-                    </ListItem>
-                </List>
-            </Drawer>
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="permanent"
+                    anchor="left"
+                >
+                    <Toolbar />
+                    <List>
+                        <ListItem button onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
+                            <HomeIcon sx={{ marginRight: 2 }} />
+                            <ListItemText primary="Home" />
+                        </ListItem>
+                        <ListItem button onClick={() => navigate('/logs')} sx={{ cursor: 'pointer' }}>
+                            <InfoIcon sx={{ marginRight: 2 }} />
+                            <ListItemText primary="Trade Logs" />
+                        </ListItem>
+                        <ListItem button onClick={() => navigate('/contact')} sx={{ cursor: 'pointer' }}>
+                            <ContactIcon sx={{ marginRight: 2 }} />
+                            <ListItemText primary="Contact" />
+                        </ListItem>
+                    </List>
+                </Drawer>
+            )}
 
             {/* Main Content */}
             <Box

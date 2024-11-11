@@ -68,7 +68,7 @@ function Home() {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh' }}>
 
             {/* Main Content */}
             <Box
@@ -77,12 +77,11 @@ function Home() {
                     flexGrow: 1,
                     bgcolor: 'background.default',
                     p: 3,
-                    width: `calc(100% - ${drawerWidth}px)`,
+                    width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100vh'
+                    justifyContent: 'center'
                 }}
             >
                 <Toolbar />
@@ -103,7 +102,7 @@ function Home() {
 
                         <Box
                             sx={{
-                                width: 300,
+                                width: { xs: '90%', sm: 400 },
                                 padding: 3,
                                 backgroundColor: 'white',
                                 borderRadius: 2,
