@@ -194,7 +194,7 @@ function TradeLogs() {
                                     selected={newTrade.entryDate}
                                     onChange={(date) => handleDateChange(date, 'entryDate')}
                                     dateFormat="yyyy/MM/dd"
-                                    customInput={<TextField fullWidth size="small" variant='standard' />}
+                                    customInput={<TextField fullWidth size="small" variant='standard' autoComplete="off" />}
                                 />
                             </Box>
                         </Grid>
@@ -207,7 +207,7 @@ function TradeLogs() {
                                     onChange={(time) => handleDateChange(time, 'entryTime')}
                                     showTimeSelect
                                     showTimeSelectOnly
-                                    timeIntervals={15}
+                                    timeIntervals={5}
                                     timeCaption="Time"
                                     dateFormat="HH:mm"
                                     customInput={<TextField fullWidth size="small" autoComplete="off" variant='standard' />}
@@ -235,7 +235,7 @@ function TradeLogs() {
                                     onChange={(time) => handleDateChange(time, 'exitTime')}
                                     showTimeSelect
                                     showTimeSelectOnly
-                                    timeIntervals={15}
+                                    timeIntervals={5}
                                     timeCaption="Time"
                                     dateFormat="HH:mm"
                                     customInput={<TextField fullWidth size="small" autoComplete="off" variant='standard' />}
